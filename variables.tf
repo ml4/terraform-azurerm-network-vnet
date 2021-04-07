@@ -3,7 +3,7 @@ variable "prefix" {
   description = "Main prefix for all objects"
 }
 
-variable "rg-name" {
+variable "rg_name" {
   type        = string
   description = "Resource group name"
 }
@@ -14,33 +14,33 @@ variable "location" {
   default     = "West Europe"
 }
 
-variable "sg-name" {
+variable "sg_name" {
   type        = string
   description = "Name of the security group"
 }
 
-variable "ddos-plan-name" {
+variable "ddos_plan_name" {
   type        = string
   description = "Name of the vnet ddos plan"
 }
 
-variable "vnet-name" {
+variable "vnet_name" {
   type        = string
   description = "Name of the vnet ddos plan"
 }
 
-variable "address-space" {
+variable "address_space" {
   type        = list
   description = "CIDR ranges for vnet"
   default     = ["10.0.0.0/16"]
 }
 
-variable "subnet1-name" {
+variable "subnet1_name" {
   type        = string
   description = "Name of a single vnet subnet"
 }
 
-variable "subnet1-address-prefix" {
+variable "subnet1_address_prefix" {
   type        = string
   description = "CIDR of single vnet subnet"
   default     = "10.0.1.0/24"
