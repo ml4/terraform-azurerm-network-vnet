@@ -13,4 +13,7 @@
 #   description = "AWS Key Pair: AWS key pair public key content"
 # }
 
-
+output "avn-avn-main-subnet-id" {
+  value       = azurerm_virtual_network.main.subnet[0].id
+  description = "Output the first VNet subnet ID"
+}

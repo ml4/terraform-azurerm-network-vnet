@@ -1,5 +1,5 @@
-# %%REPONAME%%
-Terraform child module to manage %%FN%%.
+# terraform-azurerm-network-vnet
+Terraform child module to manage Azure vnets.
 
 ## Relevant Requirements & Prerequisites
 *
