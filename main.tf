@@ -1,5 +1,5 @@
-## main.tf terraform configuration
-#
+//// main.tf terraform configuration
+//
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-${var.rg_name}"
   location = var.location
