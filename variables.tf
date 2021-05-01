@@ -6,6 +6,7 @@ variable "prefix" {
 variable "rg_name" {
   type        = string
   description = "Resource group name"
+  default = "${var.prefix}-rg"
 }
 
 variable "location" {
@@ -14,50 +15,14 @@ variable "location" {
   default     = "West Europe"
 }
 
-// variable "ddos_plan_name" {
-//   type        = string
-//   description = "Name of the vnet ddos plan"
-// }
-
-// variable "vnet_name" {
-//   type        = string
-//   description = "Name of the vnet ddos plan"
-// }
-
-variable "public_ip_allowlist" {
-  type        = list(string)
-  default     = ["0.0.0.0/0"]       // demo only
-}
-
-variable "vnet_address_space" {
-  description = "The network address CIDR for the Vnet address space."
-}
-
-// variable "vnet_address_spaces" {
-//   type        = list(string)
-//   description = "CIDR ranges for vnet"
-//   default     = ["10.0.0.0/16"]
-// }
-
-variable "subnet_address_spaces" {
-  type        = list(string)
-  description = "CIDR ranges for vnet"
-  default     = ["10.0.1.0/16"]
-}
-
-// variable "private_subnet_name" {
-//   type        = string
-//   description = "Name of a single private vnet subnet"
-// }
-
-// variable "private_subnet_cidr" {
-//   type        = string
-//   description = "CIDR of single private vnet subnet"
-//   default     = "10.0.1.0/24"
-// }
-
 variable "common_tags" {
   type        = map(string)
   description = "(Optional) Map of common tags for taggable resources."
   default     = {}
+}
+
+variable "vnet_address_space" {
+  type = list(string)
+  description = "(Optional) list of vnet address ranges"
+  default = ["10.0.0.0/16"]
 }
