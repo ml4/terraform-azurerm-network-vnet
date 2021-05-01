@@ -29,20 +29,20 @@ variable "vnet_name" {
   description = "Name of the vnet ddos plan"
 }
 
-variable "address_space" {
+variable "subnet_address_spaces" {
   type        = list
   description = "CIDR ranges for vnet"
   default     = ["10.0.0.0/16"]
 }
 
-variable "subnet1_name" {
+variable "private_subnet_name" {
   type        = string
-  description = "Name of a single vnet subnet"
+  description = "Name of a single private vnet subnet"
 }
 
-variable "subnet1_address_prefix" {
+variable "private_subnet_cidr" {
   type        = string
-  description = "CIDR of single vnet subnet"
+  description = "CIDR of single private vnet subnet"
   default     = "10.0.1.0/24"
 }
 
