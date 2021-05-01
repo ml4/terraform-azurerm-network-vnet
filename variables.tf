@@ -31,7 +31,7 @@ variable "vnet_name" {
 
 variable "public_ip_allowlist" {
   type        = list(string)
-  default     = "0.0.0.0/0"       // demo only
+  default     = ["0.0.0.0/0"]       // demo only
 }
 
 variable "subnet_address_spaces" {
