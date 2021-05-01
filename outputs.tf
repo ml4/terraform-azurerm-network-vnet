@@ -13,7 +13,7 @@
 //   description = "AWS Key Pair: AWS key pair public key content"
 // }
 
-output "avn-avn-main-subnet-id" {
-  value       = azurerm_virtual_network.networking.subnet.id
-  description = "Output the VNet subnet ID"
-}
+// output "avn-avn-main-subnet-id" {
+//   value       = azurerm_virtual_network.networking.subnet.id
+//   description = "Output the VNet subnet ID"
+// }
