@@ -6,7 +6,6 @@ variable "prefix" {
 variable "rg_name" {
   type        = string
   description = "Resource group name"
-  default = "${var.prefix}-rg"
 }
 
 variable "location" {
