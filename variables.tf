@@ -29,11 +29,15 @@ variable "public_ip_allowlist" {
   default     = ["0.0.0.0/0"]       // demo only
 }
 
-variable "vnet_address_spaces" {
-  type        = list(string)
-  description = "CIDR ranges for vnet"
-  default     = ["10.0.0.0/16"]
+variable "vnet_address_space" {
+  description = "The network address CIDR for the Vnet address space."
 }
+
+// variable "vnet_address_spaces" {
+//   type        = list(string)
+//   description = "CIDR ranges for vnet"
+//   default     = ["10.0.0.0/16"]
+// }
 
 variable "subnet_address_spaces" {
   type        = list(string)
