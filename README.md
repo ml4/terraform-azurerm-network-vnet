@@ -1,5 +1,6 @@
 # terraform-azurerm-network-vnet
 Terraform child module to manage Azure vnets.
+Kudos to Tom Straub.
 
 ## Relevant Requirements & Prerequisites
 *

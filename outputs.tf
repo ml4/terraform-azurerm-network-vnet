@@ -14,6 +14,6 @@
 // }
 
 output "avn-avn-main-subnet-id" {
-  value       = azurerm_virtual_network.main.subnet.id
+  value       = azurerm_virtual_network.networking.subnet.id
   description = "Output the VNet subnet ID"
 }
