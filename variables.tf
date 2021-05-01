@@ -28,9 +28,14 @@ variable "vnet_name" {
   type        = string
   description = "Name of the vnet ddos plan"
 }
-public_ip_allowlist[count.index]
+
+variable "public_ip_allowlist" {
+  type        = list(string)
+  default     = "0.0.0.0/0"       // demo only
+}
+
 variable "subnet_address_spaces" {
-  type        = list
+  type        = list(string)
   description = "CIDR ranges for vnet"
   default     = ["10.0.0.0/16"]
 }
