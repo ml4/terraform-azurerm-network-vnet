@@ -10,7 +10,7 @@ resource "azurerm_virtual_network" "networking" {
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
   name                = "${var.prefix}-vnet"
-  address_space       = [var.vnet_address_spaces]
+  address_space       = var.vnet_address_spaces[0]
   tags                = var.common_tags
 }
 
