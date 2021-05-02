@@ -13,34 +13,34 @@ resource "azurerm_virtual_network" "networking" {
   tags                = var.common_tags
 }
 
-// resource "azurerm_subnet" "networking" {
-//   resource_group_name  = azurerm_resource_group.main.name
-//   virtual_network_name = azurerm_virtual_network.networking.name
-//   count                = length(var.subnet_address_spaces)
-//   name                 = "${var.subnet_address_spaces[count.index].name}-subnet"
-//   address_prefixes     = [var.subnet_address_spaces[count.index].address_space]
+resource "azurerm_subnet" "networking" {
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.networking.name
+  count                = length(var.subnet_address_spaces)
+  name                 = "${var.subnet_address_spaces[count.index].name}-subnet"
+  address_prefixes     = [var.subnet_address_spaces[count.index].address_space]
 
-//   service_endpoints = [
-//     "Microsoft.Sql",
-//     "Microsoft.Storage",
-//     "Microsoft.KeyVault"
-//   ]
-//   # NSG must be assigned twice. See issue https://github.com/terraform-providers/terraform-provider-azurerm/issues/2526
-//   # network_security_group_id = azurerm_network_security_group.networking.id
-// }
+  service_endpoints = [
+    "Microsoft.Sql",
+    "Microsoft.Storage",
+    "Microsoft.KeyVault"
+  ]
+  # NSG must be assigned twice. See issue https://github.com/terraform-providers/terraform-provider-azurerm/issues/2526
+  network_security_group_id = azurerm_network_security_group.networking.id
+}
 
-// resource "azurerm_network_security_group" "networking" {
-//   resource_group_name = azurerm_resource_group.main.name
-//   location            = var.location
-//   name                = "${var.prefix}-nsg"
-//   tags                = var.common_tags
-// }
+resource "azurerm_network_security_group" "networking" {
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  name                = "${var.prefix}-nsg"
+  tags                = var.common_tags
+}
 
-// resource "azurerm_subnet_network_security_group_association" "networking" {
-//   count                     = length(var.subnet_address_spaces)
-//   subnet_id                 = azurerm_subnet.networking[count.index].id
-//   network_security_group_id = azurerm_network_security_group.networking.id
-// }
+resource "azurerm_subnet_network_security_group_association" "networking" {
+  count                     = length(var.subnet_address_spaces)
+  subnet_id                 = azurerm_subnet.networking[count.index].id
+  network_security_group_id = azurerm_network_security_group.networking.id
+}
 
 // # Only allows SSH from white list IPs
 // resource "azurerm_network_security_rule" "rule-SSH" {
