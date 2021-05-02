@@ -42,7 +42,7 @@ resource "azurerm_subnet_network_security_group_association" "networking" {
 
 # Only allows SSH from allowed IPs
 resource "azurerm_network_security_rule" "rule-SSH" {
-  resource_group_name         = var.rg_name
+  resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.networking.name
   name                        = "ansr-ssh"
   description                 = "SSH open for debugging"
@@ -57,7 +57,7 @@ resource "azurerm_network_security_rule" "rule-SSH" {
 }
 
 resource "azurerm_network_security_rule" "rule-https-application" {
-  resource_group_name         = var.rg_name
+  resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.networking.name
   name                        = "ansr-https"
   description                 = "Allow HTTPS (443) traffic"
