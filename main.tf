@@ -26,7 +26,7 @@ resource "azurerm_subnet" "networking" {
     "Microsoft.KeyVault"
   ]
   # NSG must be assigned twice. See issue https://github.com/terraform-providers/terraform-provider-azurerm/issues/2526
-  network_security_group_id = azurerm_network_security_group.networking.id
+  // network_security_group_id = azurerm_network_security_group.networking.id
 }
 
 resource "azurerm_network_security_group" "networking" {
