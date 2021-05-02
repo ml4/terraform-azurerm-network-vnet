@@ -44,7 +44,6 @@ resource "azurerm_subnet_network_security_group_association" "networking" {
 resource "azurerm_network_security_rule" "rule-SSH" {
   resource_group_name         = var.rg_name
   network_security_group_name = azurerm_network_security_group.networking.name
-  count                       = length(var.public_ip_allowlist)
   name                        = "SSH-${count.index}"
   description                 = "SSH open for debugging from: ${var.public_ip_allowlist[count.index]}"
   priority                    = 100 + count.index
@@ -53,7 +52,7 @@ resource "azurerm_network_security_rule" "rule-SSH" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefix       = var.public_ip_allowlist[count.index]
+  source_address_prefix       = "*"
   destination_address_prefix  = "*"
 }
 
@@ -72,18 +71,18 @@ resource "azurerm_network_security_rule" "rule-https-application" {
   destination_address_prefix  = "*"
 }
 
-# Needed for Application Gateway rule on vnet
-resource "azurerm_network_security_rule" "rule-nsg" {
-  resource_group_name         = var.rg_name
-  network_security_group_name = azurerm_network_security_group.networking.name
-  name                        = "nsg"
-  description                 = "Port range required for Azure infrastructure communication."
-  priority                    = 500
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "*"
-  source_port_range           = "*"
-  destination_port_range      = "65200-65535"
-  source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-}
+// # Needed for Application Gateway rule on vnet
+// resource "azurerm_network_security_rule" "rule-nsg" {
+//   resource_group_name         = var.rg_name
+//   network_security_group_name = azurerm_network_security_group.networking.name
+//   name                        = "nsg"
+//   description                 = "Port range required for Azure infrastructure communication."
+//   priority                    = 500
+//   direction                   = "Inbound"
+//   access                      = "Allow"
+//   protocol                    = "*"
+//   source_port_range           = "*"
+//   destination_port_range      = "65200-65535"
+//   source_address_prefix       = "*"
+//   destination_address_prefix  = "*"
+// }
