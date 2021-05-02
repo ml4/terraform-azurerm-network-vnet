@@ -44,9 +44,9 @@ resource "azurerm_subnet_network_security_group_association" "networking" {
 resource "azurerm_network_security_rule" "rule-SSH" {
   resource_group_name         = var.rg_name
   network_security_group_name = azurerm_network_security_group.networking.name
-  name                        = "SSH-${count.index}"
+  name                        = "ansr-ssh"
   description                 = "SSH open for debugging from: ${var.public_ip_allowlist[count.index]}"
-  priority                    = 100 + count.index
+  priority                    = 101
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -59,7 +59,7 @@ resource "azurerm_network_security_rule" "rule-SSH" {
 resource "azurerm_network_security_rule" "rule-https-application" {
   resource_group_name         = var.rg_name
   network_security_group_name = azurerm_network_security_group.networking.name
-  name                        = "TFEApp"
+  name                        = "ansr-https"
   description                 = "Allow HTTPS (443) traffic."
   priority                    = 1000
   direction                   = "Inbound"
