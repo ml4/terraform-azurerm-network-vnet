@@ -1,9 +1,9 @@
 //// main.tf terraform configuration
 //
-resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-${var.rg_name}"
-  location = var.location
-}
+//resource "azurerm_resource_group" "main" {
+  //name     = "${var.prefix}-${var.rg_name}"
+  //location = var.location
+//}
 
 resource "azurerm_virtual_network" "networking" {
   resource_group_name = azurerm_resource_group.main.name
