@@ -1,3 +1,4 @@
+
 //// main.tf terraform configuration
 //
 resource "azurerm_resource_group" "main" {
@@ -13,12 +14,14 @@ resource "azurerm_virtual_network" "networking" {
   tags                = var.common_tags
 }
 
-resource "azurerm_subnet" "networking" {
+//// public subnet - defined by the security rules defined below
+//
+resource "azurerm_subnet" "public" {
   resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.networking.name
-  count                = length(var.subnet_address_spaces)
-  name                 = "${var.subnet_address_spaces[count.index].name}-subnet"
-  address_prefixes     = [var.subnet_address_spaces[count.index].address_space]
+  count                = length(var.public_subnet_address_spaces)
+  name                 = "${var.public_subnet_address_spaces[count.index].name}-subnet"
+  address_prefixes     = [var.public_subnet_address_spaces[count.index].address_space]
 
   service_endpoints = [
     "Microsoft.Sql",
@@ -27,23 +30,24 @@ resource "azurerm_subnet" "networking" {
   ]
 }
 
-resource "azurerm_network_security_group" "networking" {
+resource "azurerm_network_security_group" "public" {
   resource_group_name = azurerm_resource_group.main.name
   location            = var.location
-  name                = "${var.prefix}-nsg"
+  name                = "${var.prefix}-public-nsg"
   tags                = var.common_tags
 }
 
-resource "azurerm_subnet_network_security_group_association" "networking" {
-  count                     = length(var.subnet_address_spaces)
-  subnet_id                 = azurerm_subnet.networking[count.index].id
-  network_security_group_id = azurerm_network_security_group.networking.id
+resource "azurerm_subnet_network_security_group_association" "public" {
+  count                     = length(var.public_subnet_address_spaces)
+  subnet_id                 = azurerm_subnet.public[count.index].id
+  network_security_group_id = azurerm_network_security_group.public.id
 }
 
-// RDP traffic
+//// RDP traffic
+//
 resource "azurerm_network_security_rule" "rule-rdp" {
   resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.networking.name
+  network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-rdp"
   description                 = "Allow RDP (3389) traffic"
   priority                    = 100
@@ -56,10 +60,11 @@ resource "azurerm_network_security_rule" "rule-rdp" {
   destination_address_prefix  = "*"
 }
 
-// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
+//// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
+//
 resource "azurerm_network_security_rule" "rule-ssh" {
   resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.networking.name
+  network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-ssh"
   description                 = "SSH open for debugging"
   priority                    = 101
@@ -72,10 +77,11 @@ resource "azurerm_network_security_rule" "rule-ssh" {
   destination_address_prefix  = "*"
 }
 
-// Allows CIFS from allowed IPs
+//// Allows CIFS from allowed IPs
+//
 resource "azurerm_network_security_rule" "rule-cifs" {
   resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.networking.name
+  network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-cifs"
   description                 = "Allow CIFS"
   priority                    = 102
@@ -88,10 +94,11 @@ resource "azurerm_network_security_rule" "rule-cifs" {
   destination_address_prefix  = "*"
 }
 
-// HTTP traffic - UNENCRYPTED WEB TRAFFIC: we advise redirection to HTTPS
+//// HTTP traffic - UNENCRYPTED WEB TRAFFIC: we advise redirection to HTTPS
+//
 resource "azurerm_network_security_rule" "rule-http-application" {
   resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.networking.name
+  network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-http"
   description                 = "Allow HTTP (80) traffic"
   priority                    = 1000
@@ -104,10 +111,11 @@ resource "azurerm_network_security_rule" "rule-http-application" {
   destination_address_prefix  = "*"
 }
 
-// HTTPS traffic
+//// HTTPS traffic
+//
 resource "azurerm_network_security_rule" "rule-https-application" {
   resource_group_name         = azurerm_resource_group.main.name
-  network_security_group_name = azurerm_network_security_group.networking.name
+  network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-https"
   description                 = "Allow HTTPS (443) traffic"
   priority                    = 1001
@@ -120,18 +128,84 @@ resource "azurerm_network_security_rule" "rule-https-application" {
   destination_address_prefix  = "*"
 }
 
-// # Needed for Application Gateway rule on vnet
-// resource "azurerm_network_security_rule" "rule-nsg" {
-//   resource_group_name         = var.rg_name
-//   network_security_group_name = azurerm_network_security_group.networking.name
-//   name                        = "nsg"
-//   description                 = "Port range required for Azure infrastructure communication."
-//   priority                    = 500
-//   direction                   = "Inbound"
-//   access                      = "Allow"
-//   protocol                    = "*"
-//   source_port_range           = "*"
-//   destination_port_range      = "65200-65535"
-//   source_address_prefix       = "*"
-//   destination_address_prefix  = "*"
-// }
+//////////////////////////////////////////////////////////////////////////////////////////
+
+//// private subnet -  - defined by the security rules defined below
+//
+resource "azurerm_subnet" "private" {
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.networking.name
+  count                = length(var.private_subnet_address_spaces)
+  name                 = "${var.private_subnet_address_spaces[count.index].name}-subnet"
+  address_prefixes     = [var.private_subnet_address_spaces[count.index].address_space]
+
+  service_endpoints = [
+    "Microsoft.Sql",
+    "Microsoft.Storage",
+    "Microsoft.KeyVault"
+  ]
+}
+
+resource "azurerm_network_security_group" "private" {
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  name                = "${var.prefix}-private-nsg"
+  tags                = var.common_tags
+}
+
+resource "azurerm_subnet_network_security_group_association" "private" {
+  count                     = length(var.private_subnet_address_spaces)
+  subnet_id                 = azurerm_subnet.private[count.index].id
+  network_security_group_id = azurerm_network_security_group.private.id
+}
+
+//// RDP traffic
+//
+resource "azurerm_network_security_rule" "rule-rdp" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.private.name
+  name                        = "ansr-rdp"
+  description                 = "Allow RDP (3389) traffic"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  destination_address_prefix  = "*"
+}
+
+//// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
+//
+resource "azurerm_network_security_rule" "rule-ssh" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.private.name
+  name                        = "ansr-ssh"
+  description                 = "SSH open for debugging"
+  priority                    = 101
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "22"
+  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  destination_address_prefix  = "*"
+}
+
+//// Allows Postgres from allowed IPs
+//
+resource "azurerm_network_security_rule" "rule-postgres" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.public.name
+  name                        = "ansr-postgres"
+  description                 = "Allow PostgreSQL"
+  priority                    = 102
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "5432"
+  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  destination_address_prefix  = "*"
+}

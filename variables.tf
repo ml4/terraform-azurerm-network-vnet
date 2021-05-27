@@ -26,14 +26,16 @@ variable "vnet_address_space" {
   default = ["10.0.0.0/16"]
 }
 
-// variable "subnet_address_spaces" {
-//   type = list(string)
-//   description = "(Optional) list of subnet address ranges"
-//   default = ["10.0.1.0/16"]
-// }
+variable "public_subnet_address_spaces" {
+  description = "A list of publically accessible subnet address spaces and names."
+  type = list(object({
+    name          = string
+    address_space = string
+  }))
+}
 
-variable "subnet_address_spaces" {
-  description = "A list of subnet address spaces and names."
+variable "private_subnet_address_spaces" {
+  description = "A list of privately accessible subnet address spaces and names."
   type = list(object({
     name          = string
     address_space = string
