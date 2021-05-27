@@ -21,9 +21,9 @@ variable "common_tags" {
 }
 
 variable "vnet_address_space" {
-  type = list(string)
+  type        = list(string)
   description = "(Optional) list of vnet address ranges"
-  default = ["10.0.0.0/16"]
+  default     = ["10.0.0.0/16"]
 }
 
 variable "public_subnet_address_spaces" {

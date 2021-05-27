@@ -56,7 +56,7 @@ resource "azurerm_network_security_rule" "rule-rdp" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "3389"
-  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  source_address_prefix       = "*" // this should be locked down but is kept open for ease of starting/experimentation
   destination_address_prefix  = "*"
 }
 
@@ -73,7 +73,7 @@ resource "azurerm_network_security_rule" "rule-ssh" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  source_address_prefix       = "*" // this should be locked down but is kept open for ease of starting/experimentation
   destination_address_prefix  = "*"
 }
 
@@ -90,7 +90,7 @@ resource "azurerm_network_security_rule" "rule-cifs" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "445"
-  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  source_address_prefix       = "*" // this should be locked down but is kept open for ease of starting/experimentation
   destination_address_prefix  = "*"
 }
 
@@ -107,7 +107,7 @@ resource "azurerm_network_security_rule" "rule-http-application" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "80"
-  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  source_address_prefix       = "*" // this should be locked down but is kept open for ease of starting/experimentation
   destination_address_prefix  = "*"
 }
 
@@ -172,7 +172,7 @@ resource "azurerm_network_security_rule" "rule-rdp" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "3389"
-  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  source_address_prefix       = "10.0.0.0/16" // access from private IP addresses only
   destination_address_prefix  = "*"
 }
 
@@ -189,7 +189,7 @@ resource "azurerm_network_security_rule" "rule-ssh" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  source_address_prefix       = "10.0.0.0/16" // access from private IP addresses only
   destination_address_prefix  = "*"
 }
 
@@ -206,6 +206,6 @@ resource "azurerm_network_security_rule" "rule-postgres" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "5432"
-  source_address_prefix       = "10.0.0.0/16"   // access from private IP addresses only
+  source_address_prefix       = "10.0.0.0/16" // access from private IP addresses only
   destination_address_prefix  = "*"
 }
