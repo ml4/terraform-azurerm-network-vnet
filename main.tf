@@ -40,8 +40,24 @@ resource "azurerm_subnet_network_security_group_association" "networking" {
   network_security_group_id = azurerm_network_security_group.networking.id
 }
 
-# Only allows SSH from allowed IPs
-resource "azurerm_network_security_rule" "rule-SSH" {
+// RDP traffic
+resource "azurerm_network_security_rule" "rule-rdp" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.networking.name
+  name                        = "ansr-rdp"
+  description                 = "Allow RDP (3389) traffic"
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  destination_address_prefix  = "*"
+}
+
+// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
+resource "azurerm_network_security_rule" "rule-ssh" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.networking.name
   name                        = "ansr-ssh"
@@ -52,16 +68,49 @@ resource "azurerm_network_security_rule" "rule-SSH" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "22"
-  source_address_prefix       = "*"
+  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
   destination_address_prefix  = "*"
 }
 
+// Allows CIFS from allowed IPs
+resource "azurerm_network_security_rule" "rule-cifs" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.networking.name
+  name                        = "ansr-cifs"
+  description                 = "Allow CIFS"
+  priority                    = 102
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "445"
+  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  destination_address_prefix  = "*"
+}
+
+// HTTP traffic - UNENCRYPTED WEB TRAFFIC: we advise redirection to HTTPS
+resource "azurerm_network_security_rule" "rule-http-application" {
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.networking.name
+  name                        = "ansr-http"
+  description                 = "Allow HTTP (80) traffic"
+  priority                    = 1000
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "*"       // this should be locked down but is kept open for ease of starting/experimentation
+  destination_address_prefix  = "*"
+}
+
+// HTTPS traffic
 resource "azurerm_network_security_rule" "rule-https-application" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.networking.name
   name                        = "ansr-https"
   description                 = "Allow HTTPS (443) traffic"
-  priority                    = 1000
+  priority                    = 1001
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
