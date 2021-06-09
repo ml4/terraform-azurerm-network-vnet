@@ -166,7 +166,7 @@ resource "azurerm_network_security_rule" "rule-rdp-private" {
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-rdp"
   description                 = "Allow RDP (3389) traffic"
-  priority                    = 100
+  priority                    = 200
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -183,7 +183,7 @@ resource "azurerm_network_security_rule" "rule-ssh-private" {
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-ssh"
   description                 = "SSH open for debugging"
-  priority                    = 101
+  priority                    = 201
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -200,7 +200,7 @@ resource "azurerm_network_security_rule" "rule-postgres-private" {
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-postgres"
   description                 = "Allow PostgreSQL"
-  priority                    = 102
+  priority                    = 202
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
