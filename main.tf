@@ -45,7 +45,7 @@ resource "azurerm_subnet_network_security_group_association" "public" {
 
 //// RDP traffic
 //
-resource "azurerm_network_security_rule" "rule-rdp" {
+resource "azurerm_network_security_rule" "rule-rdp-public" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-rdp"
@@ -62,7 +62,7 @@ resource "azurerm_network_security_rule" "rule-rdp" {
 
 //// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
 //
-resource "azurerm_network_security_rule" "rule-ssh" {
+resource "azurerm_network_security_rule" "rule-ssh-public" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-ssh"
@@ -79,7 +79,7 @@ resource "azurerm_network_security_rule" "rule-ssh" {
 
 //// Allows CIFS from allowed IPs
 //
-resource "azurerm_network_security_rule" "rule-cifs" {
+resource "azurerm_network_security_rule" "rule-cifs-public" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-cifs"
@@ -96,7 +96,7 @@ resource "azurerm_network_security_rule" "rule-cifs" {
 
 //// HTTP traffic - UNENCRYPTED WEB TRAFFIC: we advise redirection to HTTPS
 //
-resource "azurerm_network_security_rule" "rule-http-application" {
+resource "azurerm_network_security_rule" "rule-http-application-public" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-http"
@@ -113,7 +113,7 @@ resource "azurerm_network_security_rule" "rule-http-application" {
 
 //// HTTPS traffic
 //
-resource "azurerm_network_security_rule" "rule-https-application" {
+resource "azurerm_network_security_rule" "rule-https-application-public" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-https"
@@ -161,7 +161,7 @@ resource "azurerm_subnet_network_security_group_association" "private" {
 
 //// RDP traffic
 //
-resource "azurerm_network_security_rule" "rule-rdp" {
+resource "azurerm_network_security_rule" "rule-rdp-private" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-rdp"
@@ -178,7 +178,7 @@ resource "azurerm_network_security_rule" "rule-rdp" {
 
 //// Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
 //
-resource "azurerm_network_security_rule" "rule-ssh" {
+resource "azurerm_network_security_rule" "rule-ssh-private" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-ssh"
@@ -195,7 +195,7 @@ resource "azurerm_network_security_rule" "rule-ssh" {
 
 //// Allows Postgres from allowed IPs
 //
-resource "azurerm_network_security_rule" "rule-postgres" {
+resource "azurerm_network_security_rule" "rule-postgres-private" {
   resource_group_name         = azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-postgres"
