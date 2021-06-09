@@ -16,10 +16,6 @@
 //   description = "AWS VPC: VPC ID"
 // }
 //
-// output "av-ang-main-subnet_id" {
-//   value       = aws_nat_gateway.main[*].subnet_id
-//   description = "AWS VPC: VPC main subnet IDs"
-// }
 
 output "avn-as-public-subnet_id" {
   value       = azurerm_subnet.public[*].id
