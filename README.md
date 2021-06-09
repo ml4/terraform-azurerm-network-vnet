@@ -52,7 +52,5 @@ No modules.
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| <a name="output_avn-avn-main-subnet-id"></a> [avn-avn-main-subnet-id](#output\_avn-avn-main-subnet-id) | VNet subnet ID(s) |
+No outputs.
 <!-- END_TF_DOCS -->
