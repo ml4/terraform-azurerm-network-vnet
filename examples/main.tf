@@ -1,6 +1,7 @@
+// amend the top section to work for your setup
 module "network-vnet" {
   source   = "app.terraform.io/myorg/network-vnet/azurerm"
-  version  = "1.0.34"
+  version  = "1.0.xx"
   prefix   = "ml4"
   rg_name  = "rmg_test_net_rg"
   location = "West Europe"
