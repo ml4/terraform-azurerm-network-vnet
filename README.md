@@ -54,6 +54,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_avn-as-private-subnet_id"></a> [avn-as-private-subnet\_id](#output\_avn-as-private-subnet\_id) | Azure VNet: Azure private Subnet IDs |
-| <a name="output_avn-as-public-subnet_id"></a> [avn-as-public-subnet\_id](#output\_avn-as-public-subnet\_id) | Azure VNet: Azure public Subnet IDs |
+| <a name="output_avn-as-private-subnets_id"></a> [avn-as-private-subnets\_id](#output\_avn-as-private-subnets\_id) | Azure VNet: Azure private Subnet IDs |
+| <a name="output_avn-as-public-subnets_id"></a> [avn-as-public-subnets\_id](#output\_avn-as-public-subnets\_id) | Azure VNet: Azure public Subnet IDs |
 <!-- END_TF_DOCS -->
