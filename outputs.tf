@@ -17,12 +17,12 @@
 // }
 //
 
-output "avn-as-public-subnet_id" {
+output "avn-as-public-subnets_id" {
   value       = azurerm_subnet.public[*].id
   description = "Azure VNet: Azure public Subnet IDs"
 }
 
-output "avn-as-private-subnet_id" {
+output "avn-as-private-subnets_id" {
   value       = azurerm_subnet.private[*].id
   description = "Azure VNet: Azure private Subnet IDs"
 }
