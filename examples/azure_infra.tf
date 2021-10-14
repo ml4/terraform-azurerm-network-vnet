@@ -1,4 +1,4 @@
-// amend the top section to work for your setup
+# amend the top section to work for your setup
 module "network-vnet" {
   source   = "app.terraform.io/myorg/network-vnet/azurerm"
   version  = "1.0.xx"

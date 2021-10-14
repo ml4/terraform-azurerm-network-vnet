@@ -1,5 +1,5 @@
-//// main.tf terraform configuration
-//
+## main.tf terraform configuration
+#
 terraform {
   required_providers {
     azure = {

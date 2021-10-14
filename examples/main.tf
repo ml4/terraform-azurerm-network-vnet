@@ -1,5 +1,5 @@
-//// main.tf terraform configuration
-//
+## main.tf terraform configuration
+#
 terraform {
   required_version = ">= 0.15.3"
   required_providers {
