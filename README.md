@@ -43,7 +43,7 @@ No modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_common_tags"></a> [common\_tags](#input\_common\_tags) | (Optional) Map of common tags for taggable resources. | `map(string)` | `{}` | no |
-| <a name="input_location"></a> [location](#input\_location) | Location to deploy to | `string` | `"West Europe"` | no |
+| <a name="input_location"></a> [location](#input\_location) | Location to deploy to | `string` | n/a | yes |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | Main prefix for all objects | `string` | n/a | yes |
 | <a name="input_private_subnet_address_spaces"></a> [private\_subnet\_address\_spaces](#input\_private\_subnet\_address\_spaces) | A list of privately accessible subnet address spaces and names. | <pre>list(object({<br>    name          = string<br>    address_space = string<br>  }))</pre> | n/a | yes |
 | <a name="input_public_subnet_address_spaces"></a> [public\_subnet\_address\_spaces](#input\_public\_subnet\_address\_spaces) | A list of publically accessible subnet address spaces and names. | <pre>list(object({<br>    name          = string<br>    address_space = string<br>  }))</pre> | n/a | yes |
@@ -56,4 +56,5 @@ No modules.
 |------|-------------|
 | <a name="output_avn-as-private-subnets_id"></a> [avn-as-private-subnets\_id](#output\_avn-as-private-subnets\_id) | Azure VNet: Azure private Subnet IDs |
 | <a name="output_avn-as-public-subnets_id"></a> [avn-as-public-subnets\_id](#output\_avn-as-public-subnets\_id) | Azure VNet: Azure public Subnet IDs |
+| <a name="output_avn-avn-vnet-"></a> [avn-avn-vnet-](#output\_avn-avn-vnet-) | Azure VNet: Azure private Subnet IDs |
 <!-- END_TF_DOCS -->

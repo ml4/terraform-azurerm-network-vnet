@@ -11,7 +11,6 @@ variable "rg_name" {
 variable "location" {
   type        = string
   description = "Location to deploy to"
-  default     = "West Europe"
 }
 
 variable "common_tags" {
