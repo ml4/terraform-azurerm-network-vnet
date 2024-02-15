@@ -27,8 +27,8 @@ output "avn-as-private-subnets_id" {
   description = "Azure VNet: Azure private Subnet IDs"
 }
 
-output "avn-avn-vnet-" {
-  value       = azurerm_subnet.private[*].id
-  description = "Azure VNet: Azure private Subnet IDs"
-}
+# output "avn-avn-vnet-" {
+#   value       = azurerm_subnet.private[*].id
+#   description = "Azure VNet: Azure private Subnet IDs"
+# }
 
