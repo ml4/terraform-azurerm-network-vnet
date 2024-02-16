@@ -9,7 +9,7 @@ variable "friendly_name_prefix" {
 
   validation { # needs 0.13+
     condition = (
-      length(var.prefix) <= 15
+      length(var.friendly_name_prefix) <= 15
     )
     error_message = "Variable is too long, 15 chars max."
   }
@@ -24,6 +24,11 @@ variable "resource_group_name" {
 variable "location" {
   type        = string
   description = "The Azure region to deploy all infrastructure to."
+
+  validation {
+    condition     = can(regex("^[A-Z][a-z]+ [A-Z][a-z]+$", var.location))
+    error_message = "Region must be in the format 'Region Name' with each word capitalized."
+  }
 }
 
 variable "common_tags" {
