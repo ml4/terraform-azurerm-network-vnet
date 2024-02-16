@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "vnet_rg" {
 resource "azurerm_virtual_network" "networking" {
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.friendly_name_prefix}-vnet-${random_string.key_vault_name.result}"
+  name                = "${var.friendly_name_prefix}-vnet-${random_string.main.result}"
   address_space       = var.vnet_address_space
   tags                = var.common_tags
 }
