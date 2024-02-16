@@ -5,13 +5,17 @@ Kudos to Tom Straub.
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.7.3 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 3.91.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 3.5.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | n/a |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | >= 3.91.0 |
 
 ## Modules
 
@@ -56,5 +60,4 @@ No modules.
 |------|-------------|
 | <a name="output_avn-as-private-subnets_id"></a> [avn-as-private-subnets\_id](#output\_avn-as-private-subnets\_id) | Azure VNet: Azure private Subnet IDs |
 | <a name="output_avn-as-public-subnets_id"></a> [avn-as-public-subnets\_id](#output\_avn-as-public-subnets\_id) | Azure VNet: Azure public Subnet IDs |
-| <a name="output_avn-avn-vnet-"></a> [avn-avn-vnet-](#output\_avn-avn-vnet-) | Azure VNet: Azure private Subnet IDs |
 <!-- END_TF_DOCS -->

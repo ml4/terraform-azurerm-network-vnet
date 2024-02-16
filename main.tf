@@ -1,15 +1,23 @@
 
 ## main.tf terraform configuration
 #
-resource "azurerm_resource_group" "main" {
-  name     = var.rg_name
+resource "random_string" "main" {
+  length  = 8
+  special = false
+  numeric = false
+  upper   = false
+}
+
+resource "azurerm_resource_group" "vnet_rg" {
+  count    = var.resource_group_name != null ? 0 : 1
+  name     = "${var.friendly_name_prefix}-vnet-rg-${random_string.main.result}"
   location = var.location
 }
 
 resource "azurerm_virtual_network" "networking" {
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.prefix}-vnet"
+  name                = "${var.friendly_name_prefix}-vnet-${random_string.key_vault_name.result}"
   address_space       = var.vnet_address_space
   tags                = var.common_tags
 }
@@ -17,7 +25,7 @@ resource "azurerm_virtual_network" "networking" {
 ## public subnet - defined by the security rules defined below
 #
 resource "azurerm_subnet" "public" {
-  resource_group_name  = azurerm_resource_group.main.name
+  resource_group_name  = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   virtual_network_name = azurerm_virtual_network.networking.name
   count                = length(var.public_subnet_address_spaces)
   name                 = "${var.public_subnet_address_spaces[count.index].name}-subnet"
@@ -31,9 +39,9 @@ resource "azurerm_subnet" "public" {
 }
 
 resource "azurerm_network_security_group" "public" {
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.prefix}-public-nsg"
+  name                = "${var.friendly_name_prefix}-public-nsg"
   tags                = var.common_tags
 }
 
@@ -46,7 +54,7 @@ resource "azurerm_subnet_network_security_group_association" "public" {
 ## RDP traffic
 #
 resource "azurerm_network_security_rule" "rule-rdp-public" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-rdp"
   description                 = "Allow RDP (3389) traffic"
@@ -63,7 +71,7 @@ resource "azurerm_network_security_rule" "rule-rdp-public" {
 ## Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
 #
 resource "azurerm_network_security_rule" "rule-ssh-public" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-ssh"
   description                 = "SSH open for debugging"
@@ -80,7 +88,7 @@ resource "azurerm_network_security_rule" "rule-ssh-public" {
 ## Allows CIFS from allowed IPs
 #
 resource "azurerm_network_security_rule" "rule-cifs-public" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-cifs"
   description                 = "Allow CIFS"
@@ -97,7 +105,7 @@ resource "azurerm_network_security_rule" "rule-cifs-public" {
 ## HTTP traffic - UNENCRYPTED WEB TRAFFIC: we advise redirection to HTTPS
 #
 resource "azurerm_network_security_rule" "rule-http-application-public" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-http"
   description                 = "Allow HTTP (80) traffic"
@@ -114,7 +122,7 @@ resource "azurerm_network_security_rule" "rule-http-application-public" {
 ## HTTPS traffic
 #
 resource "azurerm_network_security_rule" "rule-https-application-public" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-https"
   description                 = "Allow HTTPS (443) traffic"
@@ -133,7 +141,7 @@ resource "azurerm_network_security_rule" "rule-https-application-public" {
 ## private subnet -  - defined by the security rules defined below
 #
 resource "azurerm_subnet" "private" {
-  resource_group_name  = azurerm_resource_group.main.name
+  resource_group_name  = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   virtual_network_name = azurerm_virtual_network.networking.name
   count                = length(var.private_subnet_address_spaces)
   name                 = "${var.private_subnet_address_spaces[count.index].name}-subnet"
@@ -147,9 +155,9 @@ resource "azurerm_subnet" "private" {
 }
 
 resource "azurerm_network_security_group" "private" {
-  resource_group_name = azurerm_resource_group.main.name
+  resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.prefix}-private-nsg"
+  name                = "${var.friendly_name_prefix}-private-nsg"
   tags                = var.common_tags
 }
 
@@ -162,7 +170,7 @@ resource "azurerm_subnet_network_security_group_association" "private" {
 ## RDP traffic
 #
 resource "azurerm_network_security_rule" "rule-rdp-private" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-rdp"
   description                 = "Allow RDP (3389) traffic"
@@ -179,7 +187,7 @@ resource "azurerm_network_security_rule" "rule-rdp-private" {
 ## Allows SSH from allowed IPs - consider switching to a non-standard port or disabling for immutable infrastructure
 #
 resource "azurerm_network_security_rule" "rule-ssh-private" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.private.name
   name                        = "ansr-ssh"
   description                 = "SSH open for debugging"
@@ -196,7 +204,7 @@ resource "azurerm_network_security_rule" "rule-ssh-private" {
 ## Allows Postgres from allowed IPs
 #
 resource "azurerm_network_security_rule" "rule-postgres-private" {
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
   name                        = "ansr-postgres"
   description                 = "Allow PostgreSQL"

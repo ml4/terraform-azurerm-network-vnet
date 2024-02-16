@@ -1,16 +1,29 @@
-variable "prefix" {
+variable "friendly_name_prefix" {
   type        = string
-  description = "Main prefix for all objects"
+  description = "Prefix used to name Azure resources uniquely."
+
+  validation {
+    condition     = !strcontains(var.friendly_name_prefix, "vnet")
+    error_message = "The prefix should not contain 'vnet'."
+  }
+
+  validation { # needs 0.13+
+    condition = (
+      length(var.prefix) <= 15
+    )
+    error_message = "Variable is too long, 15 chars max."
+  }
 }
 
-variable "rg_name" {
+variable "resource_group_name" {
   type        = string
-  description = "Resource group name"
+  description = "Name of the resource group where the resources will be created"
+  default     = null
 }
 
 variable "location" {
   type        = string
-  description = "Location to deploy to"
+  description = "The Azure region to deploy all infrastructure to."
 }
 
 variable "common_tags" {
