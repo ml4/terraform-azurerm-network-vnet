@@ -53,6 +53,7 @@ No modules.
 | <a name="input_location"></a> [location](#input\_location) | The Azure region to deploy all infrastructure to. | `string` | n/a | yes |
 | <a name="input_private_subnet_address_spaces"></a> [private\_subnet\_address\_spaces](#input\_private\_subnet\_address\_spaces) | A list of privately accessible subnet address spaces and names. | <pre>list(object({<br>    name          = string<br>    address_space = string<br>  }))</pre> | n/a | yes |
 | <a name="input_public_subnet_address_spaces"></a> [public\_subnet\_address\_spaces](#input\_public\_subnet\_address\_spaces) | A list of publically accessible subnet address spaces and names. | <pre>list(object({<br>    name          = string<br>    address_space = string<br>  }))</pre> | n/a | yes |
+| <a name="input_random_string"></a> [random\_string](#input\_random\_string) | Random string to append to certain resource names. | `string` | `null` | no |
 | <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name) | Name of the resource group where the resources will be created | `string` | `null` | no |
 | <a name="input_vnet_address_space"></a> [vnet\_address\_space](#input\_vnet\_address\_space) | (Optional) list of vnet address ranges | `list(string)` | <pre>[<br>  "10.0.0.0/16"<br>]</pre> | no |
 
