@@ -15,6 +15,12 @@ variable "friendly_name_prefix" {
   }
 }
 
+variable "random_string" {
+  type        = string
+  description = "Random string to append to certain resource names."
+  default     = null
+}
+
 variable "resource_group_name" {
   type        = string
   description = "Name of the resource group where the resources will be created"
