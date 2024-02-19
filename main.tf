@@ -2,7 +2,7 @@
 ## main.tf terraform configuration
 #
 resource "random_string" "main" {
-  count = var.random_string != null ? 0 : 1
+  count   = var.random_string != null ? 0 : 1
   length  = 4
   special = false
   numeric = false
