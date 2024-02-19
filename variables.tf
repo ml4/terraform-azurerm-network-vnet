@@ -21,6 +21,12 @@ variable "resource_group_name" {
   default     = null
 }
 
+variable "random_string" {
+  type        = string
+  description = "Random string to append to certain resource names."
+  default     = null
+}
+
 variable "location" {
   type        = string
   description = "The Azure region to deploy all infrastructure to."

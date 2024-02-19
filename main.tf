@@ -1,6 +1,14 @@
 
 ## main.tf terraform configuration
 #
+resource "random_string" "main" {
+  count = var.random_string != null ? 0 : 1
+  length  = 4
+  special = false
+  numeric = false
+  upper   = false
+}
+
 resource "azurerm_resource_group" "vnet_rg" {
   count    = var.resource_group_name != null ? 0 : 1
   name     = "${var.friendly_name_prefix}-vnet-rg"
