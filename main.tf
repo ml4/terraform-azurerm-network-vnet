@@ -29,7 +29,7 @@ resource "azurerm_subnet" "public" {
   resource_group_name  = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   virtual_network_name = azurerm_virtual_network.networking.name
   count                = length(var.public_subnet_address_spaces)
-  name                 = "${var.public_subnet_address_spaces[count.index].name}-subne-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
+  name                 = "${var.public_subnet_address_spaces[count.index].name}-subnet-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   address_prefixes     = [var.public_subnet_address_spaces[count.index].address_space]
 
   service_endpoints = [
