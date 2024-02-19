@@ -11,14 +11,14 @@ resource "random_string" "main" {
 
 resource "azurerm_resource_group" "vnet_rg" {
   count    = var.resource_group_name != null ? 0 : 1
-  name     = "${var.friendly_name_prefix}-vnet-rg"
+  name     = "${var.friendly_name_prefix}-vnet-rg-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   location = var.location
 }
 
 resource "azurerm_virtual_network" "networking" {
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.friendly_name_prefix}-vnet"
+  name                = "${var.friendly_name_prefix}-vnet-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   address_space       = var.vnet_address_space
   tags                = var.common_tags
 }
@@ -29,7 +29,7 @@ resource "azurerm_subnet" "public" {
   resource_group_name  = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   virtual_network_name = azurerm_virtual_network.networking.name
   count                = length(var.public_subnet_address_spaces)
-  name                 = "${var.public_subnet_address_spaces[count.index].name}-subnet"
+  name                 = "${var.public_subnet_address_spaces[count.index].name}-subne-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   address_prefixes     = [var.public_subnet_address_spaces[count.index].address_space]
 
   service_endpoints = [
@@ -42,7 +42,7 @@ resource "azurerm_subnet" "public" {
 resource "azurerm_network_security_group" "public" {
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.friendly_name_prefix}-public-nsg"
+  name                = "${var.friendly_name_prefix}-public-nsg-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   tags                = var.common_tags
 }
 
@@ -57,7 +57,7 @@ resource "azurerm_subnet_network_security_group_association" "public" {
 resource "azurerm_network_security_rule" "rule-rdp-public" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-rdp"
+  name                        = "ansr-rdp-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow RDP (3389) traffic"
   priority                    = 100
   direction                   = "Inbound"
@@ -74,7 +74,7 @@ resource "azurerm_network_security_rule" "rule-rdp-public" {
 resource "azurerm_network_security_rule" "rule-ssh-public" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-ssh"
+  name                        = "ansr-ssh-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "SSH open for debugging"
   priority                    = 101
   direction                   = "Inbound"
@@ -91,7 +91,7 @@ resource "azurerm_network_security_rule" "rule-ssh-public" {
 resource "azurerm_network_security_rule" "rule-cifs-public" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-cifs"
+  name                        = "ansr-cifs-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow CIFS"
   priority                    = 102
   direction                   = "Inbound"
@@ -108,7 +108,7 @@ resource "azurerm_network_security_rule" "rule-cifs-public" {
 resource "azurerm_network_security_rule" "rule-http-application-public" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-http"
+  name                        = "ansr-http-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow HTTP (80) traffic"
   priority                    = 1000
   direction                   = "Inbound"
@@ -125,7 +125,7 @@ resource "azurerm_network_security_rule" "rule-http-application-public" {
 resource "azurerm_network_security_rule" "rule-https-application-public" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-https"
+  name                        = "ansr-https-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow HTTPS (443) traffic"
   priority                    = 1001
   direction                   = "Inbound"
@@ -145,7 +145,7 @@ resource "azurerm_subnet" "private" {
   resource_group_name  = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   virtual_network_name = azurerm_virtual_network.networking.name
   count                = length(var.private_subnet_address_spaces)
-  name                 = "${var.private_subnet_address_spaces[count.index].name}-subnet"
+  name                 = "${var.private_subnet_address_spaces[count.index].name}-subnet-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   address_prefixes     = [var.private_subnet_address_spaces[count.index].address_space]
 
   service_endpoints = [
@@ -158,7 +158,7 @@ resource "azurerm_subnet" "private" {
 resource "azurerm_network_security_group" "private" {
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.friendly_name_prefix}-private-nsg"
+  name                = "${var.friendly_name_prefix}-private-nsg-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   tags                = var.common_tags
 }
 
@@ -173,7 +173,7 @@ resource "azurerm_subnet_network_security_group_association" "private" {
 resource "azurerm_network_security_rule" "rule-rdp-private" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.private.name
-  name                        = "ansr-rdp"
+  name                        = "ansr-rdp-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow RDP (3389) traffic"
   priority                    = 200
   direction                   = "Inbound"
@@ -190,7 +190,7 @@ resource "azurerm_network_security_rule" "rule-rdp-private" {
 resource "azurerm_network_security_rule" "rule-ssh-private" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.private.name
-  name                        = "ansr-ssh"
+  name                        = "ansr-ssh-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "SSH open for debugging"
   priority                    = 201
   direction                   = "Inbound"
@@ -207,7 +207,7 @@ resource "azurerm_network_security_rule" "rule-ssh-private" {
 resource "azurerm_network_security_rule" "rule-postgres-private" {
   resource_group_name         = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   network_security_group_name = azurerm_network_security_group.public.name
-  name                        = "ansr-postgres"
+  name                        = "ansr-postgres-${var.random_string != null ? var.random_string : random_string.main[count.index].result}"
   description                 = "Allow PostgreSQL"
   priority                    = 202
   direction                   = "Inbound"
