@@ -1,24 +1,16 @@
 
 ## main.tf terraform configuration
 #
-resource "random_string" "main" {
-  count = var.random_string != null ? 0 : 1
-  length  = 8
-  special = false
-  numeric = false
-  upper   = false
-}
-
 resource "azurerm_resource_group" "vnet_rg" {
   count    = var.resource_group_name != null ? 0 : 1
-  name     = "${var.friendly_name_prefix}-vnet-rg-${var.random_string != null ? var.random_string : random_string.main[0].result}"
+  name     = "${var.friendly_name_prefix}-vnet-rg"
   location = var.location
 }
 
 resource "azurerm_virtual_network" "networking" {
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : azurerm_resource_group.vnet_rg[0].name
   location            = var.location
-  name                = "${var.friendly_name_prefix}-vnet-${var.random_string != null ? var.random_string : random_string.main[0].result}"
+  name                = "${var.friendly_name_prefix}-vnet"
   address_space       = var.vnet_address_space
   tags                = var.common_tags
 }

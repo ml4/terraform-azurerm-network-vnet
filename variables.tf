@@ -9,16 +9,10 @@ variable "friendly_name_prefix" {
 
   validation { # needs 0.13+
     condition = (
-      length(var.friendly_name_prefix) <= 15
+      length(var.friendly_name_prefix) <= 12
     )
-    error_message = "Variable is too long, 15 chars max."
+    error_message = "Variable is too long, 12 chars max."
   }
-}
-
-variable "random_string" {
-  type        = string
-  description = "Random string to append to certain resource names."
-  default     = null
 }
 
 variable "resource_group_name" {
